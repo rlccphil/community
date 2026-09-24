@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#365233">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>RLCC Community Dashboard</title>
+<link rel="icon" href="logo.png">
+<style>
+:root{--brand:#365233;--dark:#294126;--soft:#edf3ec;--ink:#172019;--mut:#66705f;--line:#dfe5dd;--bg:#f5f7f4;--card:#fff;--good:#2f7a3d;--goodbg:#e5f3e7;--bad:#b04545;--badbg:#f9ebeb;--warn:#8a6414;--warnbg:#fbf2dc}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:env(safe-area-inset-bottom)}
+button,input{font:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid #7fae78;outline-offset:2px}
+.top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 14px 8px;display:flex;align-items:center;gap:10px}
+.logo{height:34px;max-width:60%;object-fit:contain;object-position:left}
+.top .sp{flex:1}
+.ibtn{min-height:44px;min-width:44px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:0 12px;color:var(--brand);font-weight:700}
+.ibtn:active{background:var(--soft)}
+.ibtn[disabled]{opacity:.5}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 14px;scrollbar-width:none;background:#fff;border-bottom:1px solid var(--line)}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:40px;padding:0 15px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:600}
+.chip[aria-pressed=true]{background:var(--brand);border-color:var(--brand);color:#fff}
+main{max-width:1180px;margin:0 auto;padding:16px 14px 48px}
+h2,h3{margin:0;line-height:1.2}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.hero h2{font-size:24px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.hero p{margin:6px 0 0;color:var(--mut)}
+.meta{margin-top:10px;font-size:12px;color:var(--mut)}
+.badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--goodbg);color:var(--good)}
+.badge.watch{background:var(--warnbg);color:var(--warn)}
+.badge.attention{background:var(--badbg);color:var(--bad)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
+.stat b{display:block;font-size:28px;line-height:1.1;color:var(--brand)}
+.stat span{font-size:13px;color:var(--mut)}
+.sec{margin-top:26px}
+.sec>h3{font-size:18px;margin-bottom:10px}
+.note{font-size:13px;color:var(--mut);margin:-4px 0 10px}
+.warn{background:var(--warnbg);color:#5f4610;border:1px solid #ecdcae;border-radius:12px;padding:10px 12px;margin-top:10px;font-size:13px}
+.grid{display:grid;gap:12px;grid-template-columns:1fr}
+.form h4{margin:0 0 8px;font-size:15px}
+.form .nums{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--mut);margin-top:6px}
+.form .nums b{font-size:20px;color:var(--ink)}
+.bar{height:10px;border-radius:99px;background:#e9eee7;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--good)}
+.bar i.mid{background:#c99a2e}.bar i.low{background:var(--bad)}
+details{margin-top:10px;font-size:14px}
+summary{cursor:pointer;min-height:36px;display:flex;align-items:center;font-weight:600;color:var(--brand)}
+details ul,.card ul{margin:6px 0 0;padding-left:20px}
+details li{margin:2px 0}
+.ana h3{font-size:16px;margin-bottom:6px}
+.ana li{margin:5px 0;font-size:14px}
+.brow{display:grid;grid-template-columns:70px 1fr 28px;gap:8px;align-items:center;font-size:13px;margin:8px 0}
+.brow .bar{height:12px}.brow .bar i{background:var(--brand)}
+.tools{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+input[type=search],input[type=password]{width:100%;min-height:46px;border:1px solid var(--line);border-radius:12px;padding:0 14px;background:#fff}
+.seg{display:flex;gap:8px;overflow-x:auto}
+.seg button{flex:none;min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:#fff;font-weight:600}
+.seg button[aria-pressed=true]{background:var(--soft);border-color:var(--brand);color:var(--brand)}
+.people{display:grid;gap:10px;grid-template-columns:1fr}
+.person h4{margin:0;font-size:16px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.tag{font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--soft);color:var(--brand)}
+.contact{font-size:13px;display:flex;flex-wrap:wrap;gap:4px 14px;overflow-wrap:anywhere}
+.contact a{color:var(--brand)}
+.reps{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.rep{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px;padding:6px 9px;border-radius:9px;background:#f6f8f5;border:1px solid #ecefea}
+.p{font-weight:800;font-size:13px;padding:1px 8px;border-radius:99px}
+.p.yes{background:var(--goodbg);color:var(--good)}.p.no{background:var(--badbg);color:var(--bad)}
+.p.na{background:#eceeeb;color:var(--mut);font-weight:600;font-size:11px}.p.warn{background:var(--warnbg);color:var(--warn)}
+.empty,.center{text-align:center;color:var(--mut);padding:40px 12px}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--brand);border-radius:50%;margin:0 auto 12px;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.err{background:var(--badbg);border:1px solid #edc9c9;color:#7b2b2b;border-radius:14px;padding:16px}
+.btn{min-height:46px;border:0;border-radius:12px;padding:0 20px;background:var(--brand);color:#fff;font-weight:700}
+.btn:active{background:var(--dark)}
+.gate{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px}
+.gate form{width:100%;max-width:380px;display:grid;gap:12px}
+.gate img{height:44px;object-fit:contain;object-position:left}
+.gate[hidden]{display:none}
+@media(min-width:700px){
+ .top,.chips{padding-left:28px;padding-right:28px}
+ main{padding:24px 28px 64px}
+ .stats{grid-template-columns:repeat(4,1fr)}
+ .grid.f{grid-template-columns:repeat(2,1fr)}
+ .grid.a{grid-template-columns:repeat(3,1fr)}
+ .people{grid-template-columns:repeat(2,1fr)}
+ .tools{flex-direction:row;align-items:center}.tools input{max-width:360px}
+ .chips{flex-wrap:wrap;overflow:visible}
+}
+@media(min-width:1000px){.grid.f{grid-template-columns:repeat(3,1fr)}.people{grid-template-columns:repeat(3,1fr)}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}}
+@media(prefers-reduced-motion:reduce){.spin{animation-duration:2s}}
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" src="logo.png" alt="Real Life Christian Communities">
+  <span class="sp"></span>
+  <button class="ibtn" id="lock" type="button">Lock</button>
+  <button class="ibtn" id="refresh" type="button" aria-label="Refresh data">Refresh</button>
+</header>
+<nav class="chips" id="chips" aria-label="Communities"></nav>
+<main id="app"><div class="center"><div class="spin"></div>Loading…</div></main>
+
+<div class="gate" id="gate" hidden>
+  <form id="gateForm">
+    <img src="logo.png" alt="">
+    <h2>Community Dashboard</h2>
+    <p style="margin:0;color:var(--mut)">Enter the access code to view community data.</p>
+    <input type="password" id="code" placeholder="Access code" autocomplete="current-password" required>
+    <div id="gateErr" class="warn" hidden></div>
+    <button class="btn" type="submit">Open dashboard</button>
+  </form>
+</div>
+
+<script>
+// Apps Script Web app URL (Deploy > Manage deployments).
+const API_URL = 'https://script.google.com/macros/s/AKfycbwsGWU-rA4d_cdmhv-TLcccU12diBSoCR23-V8poKhha2kFy8ZzpgFLhy63W_8D3ufb2A/exec';
+
+const K = {code: 'rlcc-cd-code', last: 'rlcc-cd-last', data: k => 'rlcc-cd-v4-' + k};
+const SELF = ['memberSelf','workerSelf','layLeaderSelf','internSelf','pastorSelf'];
+const LABEL = {discipleship:'Discipleship', outreach:'Outreach', leadership:'Leadership', memberReport:'Member Report'};
+const $ = s => document.querySelector(s);
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = v => String(v || '').toLowerCase().replace(/&/g,'and').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+const store = {
+  get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } },
+  set(k,v){ try { localStorage.setItem(k,v); } catch(e){} },
+  del(k){ try { localStorage.removeItem(k); } catch(e){} }
+};
+
+let cfg = null, cur = '', data = null, reqId = 0, ui = {q:'', f:'all'};
+
+async function api(action, params) {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'text/plain;charset=utf-8'},
+    body: JSON.stringify(Object.assign({action, code: store.get(K.code) || ''}, params || {}))
+  });
+  const j = await res.json();
+  if (!j.ok) { const e = new Error(j.error || 'Request failed.'); e.code = j.code; throw e; }
+  return j.data;
+}
+
+function showGate(msg) {
+  $('#gate').hidden = false;
+  const g = $('#gateErr'); g.hidden = !msg; g.textContent = msg || '';
+  $('#code').focus();
+}
+
+function fail(e) {
+  if (e.code === 'AUTH' || e.code === 'LOCKED') { store.del(K.code); showGate(e.message); return; }
+  const setup = /PASTE_YOUR/.test(API_URL);
+  $('#app').innerHTML = `<div class="err"><b>${setup ? 'Add your Web app URL' : 'Could not load the dashboard'}</b><p>${esc(setup ? 'Open index.html and paste your Apps Script Web app URL into API_URL.' : e.message || e)}</p>${setup ? '' : '<button class="btn" onclick="boot()">Try again</button>'}</div>`;
+  $('#refresh').disabled = false;
+}
+
+async function boot() {
+  if (/PASTE_YOUR/.test(API_URL)) return fail(new Error('setup'));
+  if (!store.get(K.code)) return showGate();
+  $('#gate').hidden = true;
+  try {
+    cfg = await api('config');
+    $('#chips').innerHTML = cfg.communities.map(c => `<button class="chip" type="button" data-k="${esc(c.key)}" aria-pressed="false">${esc(c.name)}</button>`).join('');
+    const last = store.get(K.last);
+    pick(cfg.communities.some(c => c.key === last) ? last : cfg.communities[0].key);
+  } catch (e) { fail(e); }
+}
+
+function pick(key) {
+  cur = key; store.set(K.last, key); ui = {q:'', f:'all'};
+  document.querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === key));
+  let cached = null;
+  try { cached = JSON.parse(store.get(K.data(key))); } catch(e){}
+  if (cached) { data = cached; render(true); load(false); }
+  else { $('#app').innerHTML = `<div class="center"><div class="spin"></div>Loading ${esc(name(key))}…</div>`; load(false); }
+}
+
+const name = k => ((cfg.communities.find(c => c.key === k) || {}).name || k);
+
+async function load(force) {
+  const key = cur, id = ++reqId;
+  $('#refresh').disabled = true;
+  try {
+    const d = await api('community', {key, force});
+    if (id !== reqId) return;
+    data = d; store.set(K.data(key), JSON.stringify(d));
+    $('#refresh').disabled = false; render(false);
+  } catch (e) {
+    if (id !== reqId) return;
+    $('#refresh').disabled = false;
+    if (!data || data.community.key !== key) fail(e);
+    else if (e.code === 'AUTH' || e.code === 'LOCKED') fail(e);
+  }
+}
+
+function reports(p) {
+  const S = data.formSummary, out = [];
+  const ok = f => { const s = p.formStatus[f.key]; return !!s && (f.monthly ? s.currentMonth : s.submitted); };
+  S.forEach(f => {
+    if (f.baseKey === 'workerMinistry') {
+      if (p.isWorker && norm(f.roleLabel) === norm(p.sharpRole)) out.push(['Worker Ministry', ok(f) ? 'yes' : 'no']);
+      return;
+    }
+    if (SELF.includes(f.key)) return;
+    out.push([LABEL[f.key] || f.name, !p.applicable[f.key] ? 'na' : ok(f) ? 'yes' : 'no']);
+  });
+  if (S.some(f => SELF.includes(f.key))) {
+    const mine = S.filter(f => SELF.includes(f.key) && p.applicable[f.key]);
+    out.push(['Self-Assessment', mine.length ? (mine.some(ok) ? 'yes' : 'no') : 'na']);
+  }
+  if (p.isWorker && S.some(f => f.baseKey === 'workerMinistry') && !out.some(r => r[0] === 'Worker Ministry')) out.push(['Worker Ministry', 'warn']);
+  return out;
+}
+
+const SYM = {yes:'✓', no:'✗', na:'N/A', warn:'⚠'};
+
+function personCard(p) {
+  const reps = reports(p);
+  const tags = [p.primaryRole, p.sharpRole].filter(Boolean).map(t => `<span class="tag">${esc(t)}</span>`).join('');
+  const contact = [p.phone ? `<a href="tel:${esc(p.phone)}">${esc(p.phone)}</a>` : '', p.email ? `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : ''].filter(Boolean).join('');
+  return `<article class="card person"><h4>${esc(p.name || 'Unnamed')}</h4>
+    <div class="tags">${tags}${p.membership ? `<span class="tag" style="background:#eef0ed;color:var(--mut)">${esc(p.membership)}</span>` : ''}${p.age != null ? `<span class="tag" style="background:#eef0ed;color:var(--mut)">Age ${p.age}</span>` : ''}</div>
+    ${contact ? `<div class="contact">${contact}</div>` : ''}
+    <div class="reps">${reps.map(r => `<div class="rep"><span>${esc(r[0])}</span><span class="p ${r[1]}" ${r[1]==='na'?'':`aria-label="${r[1]==='yes'?'Submitted':r[1]==='no'?'Missing':'No form found'}"`}>${SYM[r[1]]}</span></div>`).join('')}</div></article>`;
+}
+
+function visiblePeople() {
+  const q = ui.q.toLowerCase().trim();
+  return data.people.filter(p => {
+    const hay = [p.name, p.email, p.phone, p.membership, p.primaryRole, p.sharpRole].join(' ').toLowerCase();
+    if (q && !hay.includes(q)) return false;
+    if (ui.f === 'missing') return reports(p).some(r => r[1] === 'no');
+    if (ui.f === 'leaders') return p.isLeader;
+    return true;
+  });
+}
+
+function drawPeople() {
+  const list = visiblePeople();
+  $('#count').textContent = list.length + ' of ' + data.people.length;
+  $('#plist').innerHTML = list.length ? list.map(personCard).join('') : '<div class="empty">No one matches. Clear the search or choose another filter.</div>';
+}
+
+function render(stale) {
+  const d = data, c = d.community, a = d.analysis || {}, S = d.formSummary || [];
+  const hc = /needs/i.test(a.overall) ? 'attention' : /watch/i.test(a.overall) ? 'watch' : '';
+  const ul = (items, fb) => `<ul>${(items && items.length ? items : [fb]).map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
+  const stat = (n, l) => `<div class="card stat"><b>${Number(n || 0).toLocaleString()}</b><span>${esc(l)}</span></div>`;
+  const formCard = f => {
+    const pct = Math.min(100, f.completion || 0), cls = pct >= 80 ? '' : pct >= 60 ? 'mid' : 'low';
+    const miss = (d.missing && d.missing[f.key]) || [];
+    return `<div class="card form"><h4>${esc(f.name)}</h4>
+      <div class="bar" role="img" aria-label="${pct}% complete"><i class="${cls}" style="width:${pct}%"></i></div>
+      <div class="nums"><span><b>${f.uniquePeople}</b> of ${f.denominator} done</span><b>${pct}%</b></div>
+      <div class="note" style="margin:6px 0 0">${esc(f.requiredLabel)} · ${esc(f.period)}</div>
+      ${miss.length ? `<details><summary>${miss.length} still missing</summary><ul>${miss.map(m => `<li>${esc(m.name)}${m.role ? ` <span style="color:var(--mut)">(${esc(m.role)})</span>` : ''}</li>`).join('')}</ul></details>` : ''}</div>`;
+  };
+  const bars = o => { const e = Object.entries(o || {}), m = Math.max(1, ...e.map(x => +x[1] || 0)); return e.map(([l, v]) => `<div class="brow"><span>${esc(l)}</span><div class="bar"><i style="width:${(v / m) * 100}%"></i></div><b>${v}</b></div>`).join(''); };
+  const when = d.generatedAt ? new Date(d.generatedAt).toLocaleString([], {dateStyle:'medium', timeStyle:'short'}) : '';
+
+  $('#app').innerHTML = `
+  <section class="card hero"><h2>${esc(c.name)} <span class="badge ${hc}">${esc(a.overall || 'Healthy')}</span></h2>
+    ${c.alternate ? `<p>${esc(c.alternate)}</p>` : ''}<p>${esc(c.description)}</p>
+    <div class="meta">${esc(d.period)} · Updated ${esc(when)}${stale ? ' · refreshing…' : ''}</div></section>
+  ${(d.warnings || []).map(w => `<div class="warn">${esc(w)}</div>`).join('')}
+  <div class="stats">${stat(d.stats.totalPeople,'People')}${stat(d.stats.activePeople,'Active')}${stat(d.stats.leaders,'Leaders')}${stat(d.stats.workers,'Workers')}</div>
+  <section class="grid a ana"><div class="card"><h3>Strengths</h3>${ul(a.strengths,'None identified yet.')}</div><div class="card"><h3>Needs attention</h3>${ul(a.weaknesses,'None identified.')}</div><div class="card"><h3>Next steps</h3>${ul(a.recommendations,'Keep the current rhythm.')}</div></section>
+  <section class="sec"><h3>Reports and assessments</h3><div class="note">Monthly reports count for ${esc(d.period)}. Self-assessments count once submitted.</div>
+    <div class="grid f">${S.length ? S.map(formCard).join('') : '<div class="empty">No report forms were found in Planning Center.</div>'}</div></section>
+  <section class="sec two"><div class="card"><h3>Age</h3><div style="margin-top:8px">${bars(d.ageBuckets)}</div></div><div class="card" style="margin-top:12px"><h3>Membership</h3><div style="margin-top:8px">${bars(d.membershipCounts)}</div></div></section>
+  <section class="sec"><h3>People <span id="count" class="note" style="margin-left:6px"></span></h3>
+    <div class="tools"><input type="search" id="q" placeholder="Search name, phone, email or role" aria-label="Search people" value="${esc(ui.q)}">
+    <div class="seg" id="seg">${[['all','Everyone'],['missing','Missing a report'],['leaders','Leaders']].map(([k, l]) => `<button type="button" data-f="${k}" aria-pressed="${ui.f === k}">${l}</button>`).join('')}</div></div>
+    <div class="people" id="plist"></div></section>`;
+  drawPeople();
+}
+
+document.addEventListener('input', e => { if (e.target.id === 'q') { ui.q = e.target.value; drawPeople(); } });
+document.addEventListener('click', e => {
+  const chip = e.target.closest('.chip'); if (chip) return pick(chip.dataset.k);
+  const seg = e.target.closest('#seg button');
+  if (seg) { ui.f = seg.dataset.f; document.querySelectorAll('#seg button').forEach(b => b.setAttribute('aria-pressed', b === seg)); drawPeople(); }
+});
+$('#refresh').addEventListener('click', () => load(true));
+$('#lock').addEventListener('click', () => { store.del(K.code); data = null; $('#app').innerHTML = ''; showGate(); });
+$('#gateForm').addEventListener('submit', e => {
+  e.preventDefault(); store.set(K.code, $('#code').value.trim()); $('#code').value = '';
+  $('#app').innerHTML = '<div class="center"><div class="spin"></div>Loading…</div>'; boot();
+});
+boot();
+</script>
+</body>
+</html>
